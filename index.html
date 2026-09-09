@@ -1,0 +1,921 @@
+<title>Cykloservis Pešek</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1b1f1c;
+    --ink-soft:#3a423c;
+    --paper:#eeece3;
+    --paper-raised:#f7f5ee;
+    --line:#c9c6b8;
+    --steel:#3d4c56;
+    --orange:#d9541f;
+    --orange-deep:#b8420f;
+    --grease:#4f6b4a;
+    --shadow: 0 1px 0 rgba(27,31,28,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#eeece3;
+      --ink-soft:#c7c9bf;
+      --paper:#181b17;
+      --paper-raised:#20241f;
+      --line:#3a3d34;
+      --steel:#9fb2bd;
+      --orange:#f0742f;
+      --orange-deep:#ff8a45;
+      --grease:#8fb587;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#eeece3;
+    --ink-soft:#c7c9bf;
+    --paper:#181b17;
+    --paper-raised:#20241f;
+    --line:#3a3d34;
+    --steel:#9fb2bd;
+    --orange:#f0742f;
+    --orange-deep:#ff8a45;
+    --grease:#8fb587;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family:"Oswald", "Arial Narrow", sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+  .mono{font-family:"IBM Plex Mono", ui-monospace, monospace;}
+  a{color:inherit;}
+  img{max-width:100%;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- hazard rule ---------- */
+  .hazard{
+    height:8px;
+    background:repeating-linear-gradient(135deg, var(--orange), var(--orange) 14px, var(--ink) 14px, var(--ink) 28px);
+    opacity:0.9;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:40;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px;
+    gap:24px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    text-decoration:none;
+  }
+  .brand svg{ display:block; }
+  .brand-text{
+    font-family:"Oswald", sans-serif;
+    font-size:1.15rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    line-height:1.05;
+  }
+  .brand-text small{
+    display:block;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.62rem;
+    letter-spacing:0.12em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    font-weight:500;
+    margin-top:2px;
+  }
+  nav.links{
+    display:flex; gap:28px; align-items:center;
+    font-size:0.86rem;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    font-weight:500;
+  }
+  nav.links a{ text-decoration:none; color:var(--ink-soft); position:relative; padding:4px 0;}
+  nav.links a:hover{ color:var(--ink); }
+  nav.links a:focus-visible, .btn:focus-visible, a:focus-visible{ outline:2px solid var(--orange); outline-offset:3px; }
+  .call-cta{
+    display:flex; align-items:center; gap:10px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.92rem;
+    font-weight:500;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .call-cta .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--grease);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--grease) 25%, transparent);
+    flex:none;
+  }
+  @media (max-width: 880px){
+    nav.links{ display:none; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:76px 0 56px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--orange-deep);
+    font-weight:600;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:2px;
+    background:var(--orange);
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 5.4vw, 4.4rem);
+    line-height:0.98;
+    font-weight:700;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--orange-deep);
+  }
+  .hero p.lede{
+    margin-top:22px;
+    font-size:1.14rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .hero-actions{
+    display:flex; gap:14px; margin-top:34px; flex-wrap:wrap;
+  }
+  .btn{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.9rem;
+    font-weight:600;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:15px 26px;
+    border-radius:2px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid transparent;
+    cursor:pointer;
+  }
+  .btn-primary{
+    background:var(--orange);
+    color:#fff9f2;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .btn-primary:hover{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--ink); }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--ink);
+    color:var(--ink);
+  }
+  .btn-ghost:hover{ background:var(--ink); color:var(--paper); }
+
+  .hero-tag{
+    justify-self:end;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:26px;
+    width:100%;
+    max-width:340px;
+    box-shadow: var(--shadow);
+    position:relative;
+  }
+  .hero-tag::before{
+    content:"";
+    position:absolute; left:-1px; top:24px;
+    width:10px; height:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:50%;
+    box-shadow: inset 0 0 0 2px var(--paper);
+  }
+  .hero-tag .tag-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px dashed var(--line);
+    padding-bottom:14px; margin-bottom:14px;
+  }
+  .hero-tag .tag-head span{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .hero-tag .tag-num{
+    font-family:"IBM Plex Mono", monospace;
+    font-weight:600;
+    color:var(--orange-deep);
+  }
+  .tag-row{
+    display:flex; justify-content:space-between; gap:12px;
+    padding:8px 0;
+    font-size:0.92rem;
+    border-bottom:1px solid var(--line);
+  }
+  .tag-row:last-child{ border-bottom:none; }
+  .tag-row dt{ color:var(--ink-soft); }
+  .tag-row dd{ margin:0; font-weight:600; font-family:"IBM Plex Mono", monospace; text-align:right;}
+  .tag-status{
+    display:inline-block; margin-top:14px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.76rem; letter-spacing:0.08em; text-transform:uppercase;
+    background:color-mix(in srgb, var(--grease) 16%, transparent);
+    color:var(--grease);
+    padding:5px 10px; border-radius:2px;
+    font-weight:600;
+  }
+
+  @media (max-width: 900px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-tag{ justify-self:start; max-width:420px; }
+  }
+
+  /* ---------- guide / rozcestník ---------- */
+  .guide{
+    background:var(--paper-raised);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .guide-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; margin-bottom:30px;
+  }
+  .guide-head h2{
+    font-size:clamp(1.5rem, 2.6vw, 1.9rem);
+    font-weight:600;
+  }
+  .guide-head p{
+    margin:10px 0 0; color:var(--ink-soft); max-width:50ch; font-size:0.98rem;
+  }
+  .guide-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:14px;
+  }
+  .guide-card{
+    display:flex; flex-direction:column; gap:16px;
+    text-decoration:none; color:var(--ink);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:22px 22px 20px;
+    position:relative;
+  }
+  .guide-card .g-top{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+  }
+  .guide-card .g-letter{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.76rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:50%;
+    width:26px; height:26px;
+    display:flex; align-items:center; justify-content:center;
+    flex:none;
+  }
+  .guide-card .g-arrow{
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--orange-deep);
+    font-size:1rem;
+    transition:transform 0.15s ease;
+  }
+  .guide-card:hover .g-arrow{ transform:translateX(4px); }
+  .guide-card:hover{ border-color:var(--orange-deep); }
+  .guide-card .g-symptom{
+    font-size:1.02rem;
+    font-weight:600;
+    line-height:1.3;
+  }
+  .guide-card .g-target{
+    margin-top:auto;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--grease);
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+  }
+  @media (max-width:880px){ .guide-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .guide-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- section shell ---------- */
+  section{ padding:64px 0; }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    gap:24px; margin-bottom:38px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:20px;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem, 3vw, 2.3rem);
+    font-weight:600;
+  }
+  .section-num{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    letter-spacing:0.08em;
+  }
+  .section-sub{
+    color:var(--ink-soft);
+    max-width:52ch;
+    margin-top:10px;
+    font-size:1rem;
+  }
+
+  /* ---------- services ---------- */
+  .services{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .service{
+    background:var(--paper-raised);
+    padding:28px 26px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .service .idx{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.78rem;
+    color:var(--orange-deep);
+    font-weight:600;
+  }
+  .service h3{
+    font-size:1.05rem;
+    font-weight:600;
+    text-transform:none;
+    letter-spacing:0;
+    font-family:"IBM Plex Sans", sans-serif;
+  }
+  .service p{
+    margin:0; color:var(--ink-soft); font-size:0.94rem;
+  }
+  .service .badge{
+    margin-top:auto;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--grease);
+  }
+  @media (max-width: 880px){ .services{ grid-template-columns:1fr 1fr; } }
+  @media (max-width: 560px){ .services{ grid-template-columns:1fr; } }
+
+  /* ---------- brands strip ---------- */
+  .brands{
+    display:flex; flex-wrap:wrap; gap:12px;
+    padding:28px 0 6px;
+  }
+  .brand-chip{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.82rem;
+    letter-spacing:0.05em;
+    padding:9px 16px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- pricing ---------- */
+  .price-groups{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+  }
+  .price-group h3{
+    font-size:0.98rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    font-family:"IBM Plex Sans", sans-serif;
+    color:var(--ink-soft);
+    padding-bottom:14px;
+    margin-bottom:4px;
+    border-bottom:1px solid var(--line);
+  }
+  .price-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:18px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .price-row:last-child{ border-bottom:none; }
+  .price-row .p-name{
+    font-weight:600;
+    font-size:1.03rem;
+  }
+  .price-row .p-desc{
+    margin:6px 0 0;
+    color:var(--ink-soft);
+    font-size:0.9rem;
+    max-width:40ch;
+  }
+  .price-row .p-value{
+    flex:none;
+    text-align:right;
+  }
+  .price-row .p-value .amt{
+    font-family:"IBM Plex Mono", monospace;
+    font-weight:600;
+    font-size:1.15rem;
+    color:var(--orange-deep);
+    white-space:nowrap;
+  }
+  .price-row .p-value .unit{
+    display:block;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-top:3px;
+  }
+  .price-note{
+    margin-top:26px;
+    padding:14px 16px;
+    background:color-mix(in srgb, var(--steel) 10%, transparent);
+    border-left:3px solid var(--steel);
+    border-radius:2px;
+    font-size:0.88rem;
+    color:var(--ink-soft);
+  }
+  @media (max-width:880px){ .price-groups{ grid-template-columns:1fr; gap:8px; } }
+
+  /* ---------- PELLS / sales ---------- */
+  .sales{
+    display:grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap:48px;
+    align-items:center;
+  }
+  .sales-art{
+    aspect-ratio:4/3;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:
+      linear-gradient(180deg, transparent 0%, transparent 100%),
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--line) 27px, var(--line) 28px);
+    position:relative;
+    overflow:hidden;
+    display:flex; align-items:flex-end; justify-content:center;
+    background-color:var(--paper-raised);
+  }
+  .sales-art svg{ width:82%; height:auto; margin-bottom:6%; }
+  .sales-badge{
+    position:absolute; top:16px; left:16px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase;
+    background:var(--ink); color:var(--paper);
+    padding:6px 10px; border-radius:2px;
+  }
+  .sales h2{ font-size:clamp(1.7rem,3vw,2.3rem); font-weight:600; margin-bottom:16px;}
+  .sales p{ color:var(--ink-soft); max-width:52ch; }
+  .sales ul{ list-style:none; margin:22px 0 0; padding:0; display:flex; flex-direction:column; gap:10px;}
+  .sales li{ display:flex; gap:12px; align-items:flex-start; font-size:0.96rem; }
+  .sales li::before{
+    content:"—"; color:var(--orange-deep); font-family:"IBM Plex Mono", monospace; flex:none;
+  }
+  @media (max-width:880px){ .sales{ grid-template-columns:1fr; } }
+
+  /* ---------- hours + location ---------- */
+  .duo{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .panel{ background:var(--paper-raised); padding:34px 30px; }
+  .panel h3{
+    font-size:1.3rem; font-weight:600; margin-bottom:22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .panel h3 .swatch{ width:10px; height:10px; background:var(--orange); border-radius:50%; }
+  .hours-row{
+    display:flex; justify-content:space-between; gap:16px;
+    padding:12px 0; border-bottom:1px solid var(--line);
+    font-size:0.96rem;
+  }
+  .hours-row:last-of-type{ border-bottom:none; }
+  .hours-row .day{ font-weight:500; }
+  .hours-row .time{ font-family:"IBM Plex Mono", monospace; color:var(--ink-soft); text-align:right;}
+  .hours-row.closed .time{ color:var(--orange-deep); }
+  .notice{
+    margin-top:20px; padding:14px 16px;
+    border:1px dashed var(--orange-deep);
+    border-radius:2px;
+    font-size:0.88rem;
+    color:var(--orange-deep);
+    font-family:"IBM Plex Mono", monospace;
+    line-height:1.5;
+  }
+  .contact-list{ display:flex; flex-direction:column; gap:20px; }
+  .contact-item dt{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:4px;
+  }
+  .contact-item dd{
+    margin:0; font-size:1.15rem; font-weight:500;
+  }
+  .contact-item a{ text-decoration:none; }
+  .contact-item a:hover{ color:var(--orange-deep); }
+  @media (max-width:880px){ .duo{ grid-template-columns:1fr; } }
+
+  /* ---------- voucher strip ---------- */
+  .voucher{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px; flex-wrap:wrap;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:4px;
+    padding:34px 38px;
+  }
+  .voucher h3{ color:var(--paper); font-size:1.4rem; font-weight:600; }
+  .voucher p{ color:color-mix(in srgb, var(--paper) 70%, transparent); margin:8px 0 0; max-width:44ch;}
+  .voucher .btn-primary{ box-shadow:3px 3px 0 var(--paper); }
+  .voucher .btn-primary:hover{ box-shadow:2px 2px 0 var(--paper); }
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:36px 0 46px;
+  }
+  .foot-row{
+    display:flex; justify-content:space-between; align-items:center;
+    gap:20px; flex-wrap:wrap;
+    font-size:0.84rem;
+    color:var(--ink-soft);
+    font-family:"IBM Plex Mono", monospace;
+  }
+  .foot-row a{ text-decoration:none; color:var(--ink-soft); }
+  .foot-row a:hover{ color:var(--ink); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+  .btn{ transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, color 0.12s ease; }
+</style>
+
+<header>
+  <div class="nav wrap">
+    <a class="brand" href="#top">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+        <circle cx="11" cy="26" r="8" stroke="currentColor" stroke-width="2"/>
+        <circle cx="27" cy="26" r="8" stroke="currentColor" stroke-width="2"/>
+        <path d="M11 26 L19 11 L27 26 M19 11 L14 26 M19 11 L24.5 12.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="19" cy="11" r="1.6" fill="currentColor"/>
+        <circle cx="11" cy="26" r="1.6" fill="var(--orange)"/>
+        <circle cx="27" cy="26" r="1.6" fill="var(--orange)"/>
+      </svg>
+      <span class="brand-text">Cyklo Pešek<small>Servis &amp; prodej kol · HK</small></span>
+    </a>
+    <nav class="links">
+      <a href="#pruvodce">Průvodce</a>
+      <a href="#sluzby">Co opravujeme</a>
+      <a href="#cenik">Ceník</a>
+      <a href="#pells">Prodej Pells</a>
+      <a href="#doba">Otevřeno</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a class="call-cta" href="tel:+420608484937"><span class="dot"></span>608&nbsp;484&nbsp;937</a>
+  </div>
+  <div class="hazard"></div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Cykloservis · Hradec Králové</div>
+        <h1>Kolo, které<br>zase <em>sedí</em>&nbsp;— a drží.</h1>
+        <p class="lede">Seřízení, centrování, stavba kol na míru i servis odpružených vidlic. Bez fronty na týdny, bez kýváním nad cenou — víte předem, co a proč se dělá.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="tel:+420608484937">Zavolat do dílny →</a>
+          <a class="btn btn-ghost" href="#sluzby">Co všechno opravujeme</a>
+        </div>
+      </div>
+      <div class="hero-tag" role="img" aria-label="Ukázková servisní visačka kola">
+        <div class="tag-head">
+          <span>Servisní visačka</span>
+          <span class="tag-num">#0426</span>
+        </div>
+        <dl style="margin:0;">
+          <div class="tag-row"><dt>Zakázka</dt><dd>Centrování + přepletení</dd></div>
+          <div class="tag-row"><dt>Kolo</dt><dd>28″ MTB</dd></div>
+          <div class="tag-row"><dt>Dodání</dt><dd>do 24 hod</dd></div>
+          <div class="tag-row"><dt>Vyzvednutí</dt><dd>Čt 12–19</dd></div>
+        </dl>
+        <span class="tag-status">● Připraveno k vyzvednutí</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="pruvodce" class="guide">
+    <div class="wrap">
+      <div class="guide-head">
+        <div>
+          <h2>Nevíte, kam s kolem? Vyberte si podle příznaku.</h2>
+          <p>Šest nejčastějších důvodů, proč k nám lidé přijíždějí — klikněte na ten svůj a rovnou vás pošleme na správnou službu nebo cenu.</p>
+        </div>
+        <span class="section-num mono">00 / PRŮVODCE</span>
+      </div>
+      <div class="guide-grid">
+        <a class="guide-card" href="#cenik">
+          <div class="g-top"><span class="g-letter">A</span><span class="g-arrow">→</span></div>
+          <span class="g-symptom">Kolo vrže, špatně řadí nebo brzdí</span>
+          <span class="g-target">Malý / standardní servis</span>
+        </a>
+        <a class="guide-card" href="#sluzby">
+          <div class="g-top"><span class="g-letter">B</span><span class="g-arrow">→</span></div>
+          <span class="g-symptom">Ráfek má osmičku, kolo hází do stran</span>
+          <span class="g-target">Centrování a přeplétání</span>
+        </a>
+        <a class="guide-card" href="#sluzby">
+          <div class="g-top"><span class="g-letter">C</span><span class="g-arrow">→</span></div>
+          <span class="g-symptom">Vidlice propadá, skřípe nebo netěsní</span>
+          <span class="g-target">Servis odpružené vidlice</span>
+        </a>
+        <a class="guide-card" href="#sluzby">
+          <div class="g-top"><span class="g-letter">D</span><span class="g-arrow">→</span></div>
+          <span class="g-symptom">Kotoučové brzdy pískají nebo neberou</span>
+          <span class="g-target">Seřízení kotoučových brzd</span>
+        </a>
+        <a class="guide-card" href="#sluzby">
+          <div class="g-top"><span class="g-letter">E</span><span class="g-arrow">→</span></div>
+          <span class="g-symptom">Staré kolo z garáže, chci ho oživit</span>
+          <span class="g-target">Renovace kola</span>
+        </a>
+        <a class="guide-card" href="#pells">
+          <div class="g-top"><span class="g-letter">F</span><span class="g-arrow">→</span></div>
+          <span class="g-symptom">Chci rovnou nové kolo</span>
+          <span class="g-target">Prodej kol Pells</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="sluzby">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Co v dílně opravujeme</h2>
+          <p class="section-sub">Od seřízení řazení po stavbu kola paprsek po paprsku — šest oblastí, kterým se v Pešku věnujeme nejvíc.</p>
+        </div>
+        <span class="section-num mono">01 / OPRAVY</span>
+      </div>
+
+      <div class="services">
+        <div class="service">
+          <span class="idx">01</span>
+          <h3>Opravy a seřízení kol</h3>
+          <p>Kompletní servis jízdních kol i elektrokol — od základního seřízení po celkovou opravu.</p>
+          <span class="badge">Kola · e-kola</span>
+        </div>
+        <div class="service">
+          <span class="idx">02</span>
+          <h3>Centrování a přeplétání</h3>
+          <p>Nové centrování nebo kompletní přeplet kola, hotovo do 24 hodin bez příplatku za rychlost.</p>
+          <span class="badge">Do 24 hod</span>
+        </div>
+        <div class="service">
+          <span class="idx">03</span>
+          <h3>Odpružené vidlice</h3>
+          <p>Servis a seřízení vidlic Rock Shox, Fox, Manitou a SR Suntour.</p>
+          <span class="badge">Suspension</span>
+        </div>
+        <div class="service">
+          <span class="idx">04</span>
+          <h3>Kotoučové brzdy</h3>
+          <p>Seřízení, opravy a odvzdušnění kotoučových brzd všech běžných systémů.</p>
+          <span class="badge">Brzdy</span>
+        </div>
+        <div class="service">
+          <span class="idx">05</span>
+          <h3>Stavba kola na zakázku</h3>
+          <p>Kolo postavené přesně na vaše komponenty, styl jízdy a rozpočet — od náboje po ráfek.</p>
+          <span class="badge">Na míru</span>
+        </div>
+        <div class="service">
+          <span class="idx">06</span>
+          <h3>Renovace kola</h3>
+          <p>Staré kolo znovu v provozuschopném a hezkém stavu — repase komponentů i vzhledu.</p>
+          <span class="badge">Repase</span>
+        </div>
+      </div>
+
+      <div class="brands">
+        <span class="brand-chip">Rock&nbsp;Shox</span>
+        <span class="brand-chip">Fox</span>
+        <span class="brand-chip">Manitou</span>
+        <span class="brand-chip">SR&nbsp;Suntour</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="cenik">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Ceník</h2>
+          <p class="section-sub">Tři úrovně servisu kola a dvě úrovně servisu vidlice — vyberte podle toho, v jakém stavu kolo přijíždí.</p>
+        </div>
+        <span class="section-num mono">02 / CENÍK</span>
+      </div>
+
+      <div class="price-groups">
+        <div class="price-group">
+          <h3>Servis kola</h3>
+          <div class="price-row">
+            <div>
+              <div class="p-name">Malý servis</div>
+              <p class="p-desc">Základní seřízení kola — brzdy, přehazovačka a přesmykač, kontrola hlavového složení.</p>
+            </div>
+            <div class="p-value"><span class="amt">900 Kč</span><span class="unit">od</span></div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="p-name">Standardní servis</div>
+              <p class="p-desc">Celková kontrola a seřízení kola, dotažení šroubů, promazání a vycentrování lehce rozjetých kol.</p>
+            </div>
+            <div class="p-value"><span class="amt">1&nbsp;299 Kč</span><span class="unit">od</span></div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="p-name">Velký servis</div>
+              <p class="p-desc">Komplexní kontrola, seřízení a výměna dílů — plášť, duše, řetěz či lanka dle potřeby.</p>
+            </div>
+            <div class="p-value"><span class="amt">2&nbsp;499 Kč</span><span class="unit">od</span></div>
+          </div>
+        </div>
+
+        <div class="price-group">
+          <h3>Servis vidlice</h3>
+          <div class="price-row">
+            <div>
+              <div class="p-name">Základní repase</div>
+              <p class="p-desc">Roční servis vidlice — výměna oleje a repase vzduchové komory. Bez materiálu.</p>
+            </div>
+            <div class="p-value"><span class="amt">700 Kč</span><span class="unit">od</span></div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="p-name">Komplexní repase</div>
+              <p class="p-desc">Rozšířený servis pro intenzivně jezděná kola — výměna kluzných pouzder a manžet. Bez materiálu.</p>
+            </div>
+            <div class="p-value"><span class="amt">850 Kč</span><span class="unit">od</span></div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="p-name">Dárkový poukaz</div>
+              <p class="p-desc">Na servis nebo nákup kola, v libovolné hodnotě — vystavíme na počkání přímo v dílně.</p>
+            </div>
+            <div class="p-value"><span class="amt">dle přání</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="price-note">Ceník je orientační a záleží na stavu jízdního kola — materiál na výměny se do cen balíčků obvykle nezapočítává a účtuje se zvlášť. Přesnou cenu vždy potvrdíme před zahájením práce.</p>
+    </div>
+  </section>
+
+  <section id="pells">
+    <div class="wrap sales">
+      <div class="sales-art">
+        <span class="sales-badge">Prodej · Pells</span>
+        <svg viewBox="0 0 220 120" aria-hidden="true">
+          <g fill="none" stroke="var(--steel)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="42" cy="90" r="26" stroke="var(--ink-soft)"/>
+            <circle cx="168" cy="90" r="26" stroke="var(--ink-soft)"/>
+            <path d="M42 90 L96 40 L168 90 M96 40 L74 90 M96 40 L128 46 L168 90 M128 46 L112 20 L92 20"/>
+            <path d="M92 20 L84 30" stroke="var(--orange)" stroke-width="3"/>
+            <circle cx="96" cy="40" r="2.6" fill="var(--ink-soft)" stroke="none"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <span class="eyebrow">Kola i díly skladem</span>
+        <h2>Prodáváme jízdní kola&nbsp;Pells</h2>
+        <p>Vedle servisu vedeme přímý prodej nových kol značky Pells a náhradních dílů — poradíme s výběrem podle vaší postavy i terénu, na kterém jezdíte.</p>
+        <ul>
+          <li>Nová kola Pells k prohlédnutí a vyzkoušení přímo v dílně</li>
+          <li>Komponenty a náhradní díly skladem nebo na objednávku</li>
+          <li>Dárkové poukazy na servis i nákup kola</li>
+        </ul>
+        <div class="hero-actions" style="margin-top:28px;">
+          <a class="btn btn-primary" href="#kontakt">Zeptat se na skladem</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="doba">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Otevírací doba a kontakt</h2>
+          <p class="section-sub">Zakázky přijímáme a vydáváme v otevírací době, úterý pouze po telefonické domluvě.</p>
+        </div>
+        <span class="section-num mono">03 / PROVOZ</span>
+      </div>
+
+      <div class="duo">
+        <div class="panel">
+          <h3><span class="swatch"></span>Otevírací doba</h3>
+          <div class="hours-row"><span class="day">Pondělí</span><span class="time">9:00–12:30 · 13:00–17:00</span></div>
+          <div class="hours-row closed"><span class="day">Úterý</span><span class="time">po telefonické dohodě</span></div>
+          <div class="hours-row"><span class="day">Středa</span><span class="time">9:00–12:30 · 13:00–17:00</span></div>
+          <div class="hours-row"><span class="day">Čtvrtek</span><span class="time">12:00–19:00</span></div>
+          <div class="hours-row"><span class="day">Pátek</span><span class="time">9:00–12:30 · 13:00–17:00</span></div>
+          <div class="hours-row closed"><span class="day">Sobota – Neděle</span><span class="time">zavřeno</span></div>
+          <div class="notice">Dílna uzavřena 14.–21. 9. 2026 — zakázky vyřídíme po návratu.</div>
+        </div>
+        <div class="panel">
+          <h3><span class="swatch"></span>Spojte se s dílnou</h3>
+          <dl class="contact-list">
+            <div class="contact-item">
+              <dt>Telefon</dt>
+              <dd><a href="tel:+420608484937">608 484 937</a></dd>
+            </div>
+            <div class="contact-item">
+              <dt>Kde nás najdete</dt>
+              <dd>Hradec Králové</dd>
+            </div>
+            <div class="contact-item">
+              <dt>Podání zakázky</dt>
+              <dd style="font-size:0.98rem; font-weight:400; color:var(--ink-soft);">V provozní době osobně, v úterý po telefonické domluvě předem.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="wrap">
+      <div class="voucher">
+        <div>
+          <h3>Kolo pro někoho blízkého?</h3>
+          <p>Dárkový poukaz na servis nebo nákup kola — vytiskneme na počkání, platí bez omezení na cokoliv v dílně.</p>
+        </div>
+        <a class="btn btn-primary" href="tel:+420608484937">Objednat poukaz</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© 2026 Cyklo Pešek — cykloservis Hradec Králové</span>
+    <a href="tel:+420608484937">608 484 937</a>
+  </div>
+</footer>
