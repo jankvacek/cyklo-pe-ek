@@ -120,6 +120,125 @@
   nav.links a{ text-decoration:none; color:var(--ink-soft); position:relative; padding:4px 0;}
   nav.links a:hover{ color:var(--ink); }
   nav.links a:focus-visible, .btn:focus-visible, a:focus-visible{ outline:2px solid var(--orange); outline-offset:3px; }
+
+  /* ---------- nav dropdown ---------- */
+  .has-dropdown{ position:relative; }
+  .drop-trigger{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:none; padding:4px 0; margin:0;
+    font:inherit; text-transform:inherit; letter-spacing:inherit;
+    color:var(--ink-soft); cursor:pointer;
+  }
+  .drop-trigger:hover{ color:var(--ink); }
+  .drop-trigger .caret{
+    width:8px; height:8px; flex:none;
+    border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+    transform:rotate(45deg) translateY(-2px);
+    transition:transform 0.15s ease;
+  }
+  .has-dropdown:hover .drop-trigger .caret,
+  .has-dropdown:focus-within .drop-trigger .caret{ transform:rotate(225deg) translateY(1px); }
+  .dropdown{
+    position:absolute; top:calc(100% + 18px); left:50%;
+    transform:translateX(-50%);
+    min-width:248px;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:3px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.16);
+    padding:8px;
+    list-style:none;
+    margin:0;
+    opacity:0; visibility:hidden; pointer-events:none;
+    transform-origin:top center;
+    transition:opacity 0.14s ease, transform 0.14s ease;
+    z-index:50;
+  }
+  .has-dropdown:hover .dropdown,
+  .has-dropdown:focus-within .dropdown{
+    opacity:1; visibility:visible; pointer-events:auto;
+    transform:translateX(-50%) translateY(0);
+  }
+  .dropdown::before{
+    content:"";
+    position:absolute; top:-6px; left:50%; transform:translateX(-50%) rotate(45deg);
+    width:11px; height:11px;
+    background:var(--paper-raised);
+    border-left:1px solid var(--line);
+    border-top:1px solid var(--line);
+  }
+  .dropdown li + li{ border-top:1px solid var(--line); }
+  .dropdown a{
+    display:block;
+    padding:11px 14px;
+    font-family:"IBM Plex Sans", sans-serif;
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:500;
+    font-size:0.92rem;
+    color:var(--ink);
+    text-decoration:none;
+    border-radius:2px;
+  }
+  .dropdown a:hover{ color:var(--orange-deep); background:var(--paper); }
+  /* ---------- burger / mobile nav ---------- */
+  .burger{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    width:38px; height:38px;
+    background:none;
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:0;
+    cursor:pointer;
+    flex:none;
+  }
+  .burger span{
+    width:18px; height:2px;
+    background:var(--ink);
+    transition:transform 0.2s ease, opacity 0.2s ease;
+  }
+  .burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  @media (max-width:880px){
+    .burger{ display:flex; }
+    nav.links{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      gap:0;
+      position:absolute;
+      top:100%; left:0; right:0;
+      background:var(--paper-raised);
+      border-bottom:1px solid var(--line);
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.22s ease;
+    }
+    nav.links.open{ max-height:520px; }
+    nav.links > a, nav.links .has-dropdown{
+      padding:14px 28px;
+      border-top:1px solid var(--line);
+    }
+    nav.links .drop-trigger{ width:100%; justify-content:space-between; padding:0; }
+    .has-dropdown{ display:block; position:static; }
+    .dropdown{
+      position:static; transform:none; opacity:1; visibility:visible; pointer-events:auto;
+      box-shadow:none; border:none; background:none; padding:0; margin-top:0;
+      max-height:0; overflow:hidden;
+      transition:max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    .dropdown::before{ display:none; }
+    .has-dropdown.open-mobile .dropdown{ max-height:400px; margin-top:12px; }
+    .has-dropdown .caret{ transform:rotate(45deg); }
+    .has-dropdown.open-mobile .caret{ transform:rotate(225deg); }
+    .dropdown a{ padding:9px 0 9px 14px; }
+  }
   .call-cta{
     display:flex; align-items:center; gap:10px;
     font-family:"IBM Plex Mono", monospace;
@@ -619,18 +738,57 @@
       </svg>
       <span class="brand-text">Cyklo Pešek<small>Servis &amp; prodej kol · HK</small></span>
     </a>
-    <nav class="links">
+    <nav class="links" id="navLinks">
       <a href="#pruvodce">Průvodce</a>
-      <a href="#sluzby">Co opravujeme</a>
+      <div class="has-dropdown">
+        <button type="button" class="drop-trigger">Co opravujeme<span class="caret"></span></button>
+        <ul class="dropdown">
+          <li><a href="#sluzby">Opravy a seřízení kol</a></li>
+          <li><a href="#sluzby">Centrování a přeplétání</a></li>
+          <li><a href="#sluzby">Odpružené vidlice</a></li>
+          <li><a href="#sluzby">Kotoučové brzdy</a></li>
+          <li><a href="#sluzby">Stavba kola na zakázku</a></li>
+          <li><a href="#sluzby">Renovace kola</a></li>
+        </ul>
+      </div>
       <a href="#cenik">Ceník</a>
       <a href="#pells">Prodej Pells</a>
       <a href="#doba">Otevřeno</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
     <a class="call-cta" href="tel:+420608484937"><span class="dot"></span>608&nbsp;484&nbsp;937</a>
+    <button type="button" class="burger" id="burgerBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Otevřít menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
   <div class="hazard"></div>
 </header>
+
+<script>
+  (function(){
+    var burger = document.getElementById('burgerBtn');
+    var nav = document.getElementById('navLinks');
+    if(!burger || !nav) return;
+    burger.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      burger.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        nav.classList.remove('open');
+        burger.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      });
+    });
+    var dropTrigger = nav.querySelector('.drop-trigger');
+    if(dropTrigger){
+      dropTrigger.addEventListener('click', function(){
+        dropTrigger.parentElement.classList.toggle('open-mobile');
+      });
+    }
+  })();
+</script>
 
 <main id="top">
   <section class="hero">
